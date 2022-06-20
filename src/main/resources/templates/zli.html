@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <!-- 引入刚刚下载的 ECharts 文件 -->
+    <script src="echarts.js"></script>
+  </head>
+  <body>
+	<div id="man1" style="width: 50%;height: 100%;float: left;background: red;">
+	</div>
+	<div id="man2" style="width: 50%;height: 100%;float: left;">
+		<div id="main1" style="color:blue" onclick="document.all.child1.style.display=(document.all.child1.style.display =='none')?'':'none'" > 
+		+ 运维状态群体画像</div> 
+		<div id="child1" style="display:none"> 
+		<a href="#">- 电热水器</a> <br> 
+		<a href="#">- 电冰箱</a> <br> 
+		<a href="#">- 电饭煲</a> <br> 
+		</div> 
+		<div id="main2" style="color:blue" onclick="document.all.child2.style.display=(document.all.child2.style.display =='none')?'':'none'" > 
+		+ 备件状态群体画像 </div> 
+		<div id="child2" style="display:none"> 
+		<a href="#">- 温控器</a> <br> 
+		<a href="#">- 变压器</a> <br> 
+		</div>
+	</div>
+  </body>
+</html>

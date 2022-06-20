@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>ECharts</title>
+    <!-- 引入刚刚下载的 ECharts 文件 -->
+    <script src="echarts.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+<div style="width: 100%;height:650px;">
+    <button id="btn" type="button">群体画像</button>
+    <div id="main1" style="width: 50%;height: 100%;float: left;"></div>
+    <div id="main2" style="width: 50%;height: 100%;float: left;"></div>
+</div>
+<script type="text/javascript">
+
+    //获取当前群体画像实例id
+    var listId = [[${id}]];
+
+    $(function () {
+        $("#btn").click(function () {
+
+            /*
+                进行饼状图绘画
+            */
+            $.ajax({
+                url: '/getPieData',
+                data: {
+                    charid: listId
+                },
+                type: 'GET',
+                success: function (res) {
+                    // 基于准备好的dom，初始化echarts实例
+                    res = JSON.parse(res);
+                    var values = new Array();
+                    var l = res.values.length;
+                    for (var i = 0; i < l; i++) {
+                        values[i] = {
+                            value: res.values[i],
+                            name: res.tips[i]
+                        }
+                    }
+
+                    var myChart = echarts.init(document.getElementById('main1'));
+
+                    myChart.setOption({
+                        title: {
+                            text: res.type,
+                            subtext: res.subType,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left'
+                        },
+                        series: [
+                            {
+                                name: 'Access From',
+                                type: 'pie',
+                                radius: '50%',
+                                data: values,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    })
+                }
+            });
+
+            /*
+                进行柱状图绘画
+             */
+            $.ajax({
+                url: '/getBarData',
+                data: {
+                    charid: listId
+                },
+                type: 'GET',
+                success: function (res) {
+                    // 基于准备好的dom，初始化echarts实例
+                    var myChart = echarts.init(document.getElementById('main2'));
+
+                    res = JSON.parse(res);
+
+                    var source = new Array();
+
+                    var features = new Array();
+                    features[0] = 'product';
+                    for(var i = 0;i < res.features.length;i++){
+                        features[i+1] = res.features[i];
+                    }
+                    source[0] = features;
+
+                    for(var i = 0;i < res.tips.length;i++){
+                        var tip = new Array();
+                        tip[0] = res.tips[i];
+                        for(var j = 0;j < res.values[i].length;j++){
+                            tip[j+1] = res.values[i][j];
+                        }
+                        source[i+1] = tip;
+                    }
+
+                    console.log(source);
+
+                    // 指定图表的配置项和数据
+                    var option = {
+                        legend: {},
+                        tooltip: {},
+                        dataset: {
+                            source: source
+                        },
+                        xAxis: {type: 'category'},
+                        yAxis: {},
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [{type: 'bar'}, {type: 'bar'}, {type: 'bar'}]
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
