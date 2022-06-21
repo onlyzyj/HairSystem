@@ -60,4 +60,20 @@ public class SystemController {
     public String editPwd(Model model){
         return "edit_pwd";
     }
+
+    @RequestMapping("onlineMonitorSearch")
+    public String onlineMonitorSearch(Model model){
+        return "onlineMonitorSearch";
+    }
+
+    @RequestMapping("valueChainUser")
+    public String valueChainUser(Model model){
+        return "valueChainUser";
+    }
+
+    @RequestMapping("valueChainStock")
+    public String valueChainStock(Model model){
+        return "valueChainStock";
+    }
+
 }
